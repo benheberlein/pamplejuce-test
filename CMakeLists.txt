@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.24.1)
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Output to build directory
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+
 include (PamplejuceVersion)
 
 # Configures universal binaries and decides which version of macOS to support
@@ -13,7 +19,7 @@ include(PamplejuceMacOS)
 # This is the internal name of the project and the name of JUCE's shared code target
 # Note: This cannot have spaces (it may be 2024, but you can't have it all!)
 # Worry not, JUCE's PRODUCT_NAME can have spaces (and is what DAWs display)
-set(PROJECT_NAME "Pamplejuce")
+set(PROJECT_NAME "PTest")
 
 # Worry not, JUCE's PRODUCT_NAME can have spaces (and is what DAWs will display)
 # You can also just have it be the same thing as PROJECT_NAME
@@ -21,13 +27,13 @@ set(PROJECT_NAME "Pamplejuce")
 #   set(PROJECT_NAME "MyPlugin_v${MAJOR_VERSION}")
 # Doing so enables major versions to show up in IDEs and DAWs as separate plugins
 # allowing you to change parameters and behavior without breaking existing user projects
-set(PRODUCT_NAME "Pamplejuce Demo")
+set(PRODUCT_NAME "PTest Demo")
 
 # Change me! Used for the MacOS bundle name and Installers
-set(COMPANY_NAME "Pamplejuce Company")
+set(COMPANY_NAME "Some Company")
 
 # Change me! Used for the MacOS bundle identifier (and signing)
-set(BUNDLE_ID "com.pamplejuce.pamplejuce")
+set(BUNDLE_ID "com.noiselifeaudio.ptest")
 
 # Change me! Set the plugin formats you want built
 # Valid choices: AAX Unity VST VST3 AU AUv3 Standalone
@@ -43,13 +49,13 @@ include(JUCEDefaults)
 # Locally, you must run `git submodule update --init --recursive` once
 # and later `git submodule update --remote --merge` to keep it up to date
 # On Github Actions, this is done as a part of actions/checkout
-add_subdirectory(JUCE)
+add_subdirectory(lib/JUCE)
 
 # Add any other modules you want modules here, before the juce_add_plugin call
 # juce_add_module(modules/my_module)
 
 # This adds the melatonin inspector module
-add_subdirectory (modules/melatonin_inspector)
+add_subdirectory (lib/melatonin_inspector)
 
 # See `docs/CMake API.md` in the JUCE repo for all config options
 juce_add_plugin("${PROJECT_NAME}"
@@ -60,18 +66,24 @@ juce_add_plugin("${PROJECT_NAME}"
     COMPANY_NAME "${COMPANY_NAME}"
     BUNDLE_ID "${BUNDLE_ID}"
 
+    # IS_SYNTH FALSE                       # Is this a synth or an effect?
+    # NEEDS_MIDI_INPUT FALSE               # Does the plugin need midi input?
+    # NEEDS_MIDI_OUTPUT FALSE              # Does the plugin need midi output?
+    # IS_MIDI_EFFECT FALSE                 # Is this plugin a MIDI effect?
+    # EDITOR_WANTS_KEYBOARD_FOCUS FALSE    # Does the editor need keyboard focus?
+
     # On MacOS, plugin is copied to ~/Users/yourname/Library/Audio/Plug-Ins/
     COPY_PLUGIN_AFTER_BUILD TRUE
 
     # Change me!
     # A four-character plugin id
     # First character MUST be uppercase for AU formats
-    PLUGIN_MANUFACTURER_CODE Pamp
+    PLUGIN_MANUFACTURER_CODE Nlau
 
     # Change me!
     # A unique four-character plugin id
     # Note: this must have at least one upper-case character
-    PLUGIN_CODE P001
+    PLUGIN_CODE N001
     FORMATS "${FORMATS}"
 
     # The name of your final executable
