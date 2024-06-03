@@ -23,21 +23,21 @@ BinPackParameters: false
 BreakAfterJavaFieldAnnotations: false
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
-BraceWrapping: # Allman except for lambdas
-  AfterClass: true
-  AfterCaseLabel: true
-  AfterFunction: true
-  AfterNamespace: true
-  AfterStruct: true
-  BeforeElse: true
-  AfterControlStatement: Always
+BraceWrapping: # K&R always
+  AfterClass: false
+  AfterCaseLabel: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  BeforeElse: false
+  AfterControlStatement: Never
   BeforeLambdaBody: false
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: false
 BreakStringLiterals: false
 ColumnLimit: 0
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
+ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: false
 DerivePointerAlignment: false
@@ -51,15 +51,15 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
 MaxEmptyLinesToKeep: 1
 FixNamespaceComments: false
-NamespaceIndentation: All
+NamespaceIndentation: None
 PointerAlignment: Left
 ReflowComments: false
-SortIncludes: true
+SortIncludes: CaseInsensitive
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCpp11BracedList: true
-SpaceBeforeParens: NonEmptyParentheses
+SpaceBeforeParens: Never
 SpaceInEmptyParentheses: false
 SpaceBeforeInheritanceColon: true
 SpacesInAngles: false

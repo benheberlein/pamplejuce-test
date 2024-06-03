@@ -3,9 +3,7 @@ file(GLOB_RECURSE BenchmarkFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/
 # Organize the test source in the Tests/ folder in the IDE
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/benchmarks PREFIX "" FILES ${BenchmarkFiles})
 
-add_executable(Benchmarks ${BenchmarkFiles}
-        ../source/LA2ACompressor.cpp
-)
+add_executable(Benchmarks ${BenchmarkFiles})
 target_compile_features(Benchmarks PRIVATE cxx_std_20)
 catch_discover_tests(Benchmarks)
 

@@ -5,12 +5,7 @@ cmake_minimum_required(VERSION 3.24.1)
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Output to build directory
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
-
-include (PamplejuceVersion)
+include(PamplejuceVersion)
 
 # Configures universal binaries and decides which version of macOS to support
 include(PamplejuceMacOS)
@@ -52,7 +47,7 @@ include(JUCEDefaults)
 add_subdirectory(lib/JUCE)
 
 # Add any other modules you want modules here, before the juce_add_plugin call
-# juce_add_module(modules/my_module)
+# juce_add_module(lib/my_module)
 
 # This adds the melatonin inspector module
 add_subdirectory (lib/melatonin_inspector)
@@ -166,3 +161,6 @@ include(Benchmarks)
 
 # Pass some config to GA (like our PRODUCT_NAME)
 include(GitHubENV)
+
+# Include the Audio Plugin Host from JUCE for debugging
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/JUCE/extras/AudioPluginHost)
