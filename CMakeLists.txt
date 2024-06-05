@@ -167,4 +167,4 @@ include(Benchmarks)
 include(GitHubENV)
 
 # Include the Audio Plugin Host from JUCE for debugging
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/JUCE/extras)
+# add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/JUCE/extras/AudioPluginHost)
