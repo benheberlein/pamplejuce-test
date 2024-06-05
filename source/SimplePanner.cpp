@@ -10,6 +10,14 @@
 using namespace juce;
 using namespace nla;
 
+/**
+ * @brief Defines a function to create audio parameters in a readable syntax
+ */
+static auto makeParam = [](const String& paramId, const String& paramName, float min, float max, float defaultValue) {
+    return std::make_unique<AudioParameterFloat>(
+        paramId, paramName, NormalisableRange<float>(min, max), defaultValue);
+};
+
 SimplePanner::SimplePanner()
   : AudioProcessor(
         BusesProperties()
@@ -53,7 +61,7 @@ bool SimplePanner::hasEditor() const {
 }
 
 const String SimplePanner::getName() const {
-    return "SimplePanner";
+    return "Simple Panner";
 }
 
 bool SimplePanner::acceptsMidi() const {
@@ -103,10 +111,8 @@ int SimplePanner::a() {
     return 88;
 }
 
-#include "GainPluginDemo.h"
-
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
-    return new GainProcessor();
+    return new SimplePanner();
 }

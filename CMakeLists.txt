@@ -44,8 +44,7 @@ include(JUCEDefaults)
 # Without running into ODR violations
 add_library(SharedCode INTERFACE
     source/SimplePanner.cpp
-    source/SimplePanner.h
-    source/GainPluginDemo.h)
+    source/SimplePanner.h)
 
 # C++20, please
 # Use cxx_std_23 for C++23 (as of CMake v 3.20)

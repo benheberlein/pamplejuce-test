@@ -12,19 +12,13 @@
  * the audio processor's state.
  */
 
+#pragma once
+
 #include <juce_audio_processors/juce_audio_processors.h>
 
 using namespace juce;
 
 namespace nla {
-
-/**
- * @brief Defines a function to create audio parameters in a readable syntax
- */
-auto makeParam = [](const String& paramId, const String& paramName, float min, float max, float defaultValue) {
-    return std::make_unique<AudioParameterFloat>(
-        paramId, paramName, NormalisableRange<float>(min, max), defaultValue);
-};
 
 class SimplePanner : public juce::AudioProcessor {
 public:

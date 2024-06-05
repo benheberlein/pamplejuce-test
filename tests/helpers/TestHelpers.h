@@ -1,5 +1,5 @@
 #pragma once
-#include <PluginProcessor.h>
+#include <SimplePanner.h>
 
 /* This is a helper function to run tests within the context of a plugin editor.
  *
@@ -17,11 +17,10 @@
 
     REQUIRE (file.existsAsFile());
    });
-
  */
-[[maybe_unused]] void runWithinPluginEditor (const std::function<void (PluginProcessor& plugin)>& testCode)
+[[maybe_unused]] void runWithinPluginEditor (const std::function<void (nla::SimplePanner& plugin)>& testCode)
 {
-    PluginProcessor plugin;
+    nla::SimplePanner plugin;
     auto gui = juce::ScopedJuceInitialiser_GUI {};
     auto editor = plugin.createEditorIfNeeded();
 
