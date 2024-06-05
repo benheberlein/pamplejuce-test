@@ -5,13 +5,11 @@
  *
  * @brief This file consists of the SimplePanner class, which is used for stereo audio processing.
  *
- * SimplePanner is a class that inherits from the JUCE's AudioProcessor. It offers functionality
- * for processing and manipulating audio signals. The main purpose of this class is to provide
- * panning facilities for audio signals which implies controlling the amplitude or intensity
- * of the signal separately in two channels.
- *
- * The class provides methods for manipulating panning, checking and handling audio buses layout
- * along with typical methods to handle and manage audio processor's state, amongst others.
+ * SimplePanner is a class that inherits from the JUCE's AudioProcessor.
+ * It provides panning capability for audio signals, thus allowing control of the amplitude or
+ * intensity of the signal in two separate channels. The class provides methods for manipulating
+ * panning, checking and handling audio buses layout, and typical methods to handle and manage
+ * the audio processor's state.
  */
 
 #include <juce_audio_processors/juce_audio_processors.h>
@@ -21,10 +19,9 @@ using namespace juce;
 namespace nla {
 
 /**
- * @brief Make parameters in a nice looking syntax
+ * @brief Defines a function to create audio parameters in a readable syntax
  */
-auto makeParam = [] (const String& paramId, const String& paramName, float min, float max, float defaultValue)
-{
+auto makeParam = [](const String& paramId, const String& paramName, float min, float max, float defaultValue) {
     return std::make_unique<AudioParameterFloat>(
         paramId, paramName, NormalisableRange<float>(min, max), defaultValue);
 };
@@ -33,45 +30,117 @@ class SimplePanner : public juce::AudioProcessor {
 public:
     SimplePanner();
 
-    void prepareToPlay(double, int) override {}
-    void releaseResources() override {}
+    /**
+     * @brief Prepare to play method
+     */
+    void prepareToPlay(double a, int b) override;
 
-    bool isBusesLayoutSupported(const BusesLayout& layouts) const override {
-        return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
-    }
+    /**
+     * @brief Releases resources used by the object
+     */
+    void releaseResources() override;
 
-    void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&) override {
-        auto* leftChannel = buffer.getWritePointer(0);
-        auto* rightChannel = buffer.getWritePointer(1);
+    /**
+     * @brief Validates if the provided audio bus layout is supported
+     * @param layouts Layouts to check
+     * @return True if layout is supported, else false
+     */
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
 
-        panValue = *parameters.getRawParameterValue("panParam");
+    /**
+     * @brief Process an audio block
+     * @param buffer Buffer to process
+     * @param midiBuffer MidiBuffer
+     */
+    void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiBuffer) override;
 
-        for(int i = 0; i < buffer.getNumSamples(); ++i) {
-            auto leftGain = fminf(panValue, 0.5f) * 2.0f;
-            auto rightGain = (1.0f - fmaxf(panValue, 0.5f)) * 2.0f;
+    /**
+     * @brief Creates and returns an AudioProcessorEditor object
+     * @return Pointer to the created AudioProcessorEditor
+     */
+    juce::AudioProcessorEditor* createEditor() override;
 
-            leftChannel[i] *= leftGain;
-            rightChannel[i] *= rightGain;
-        }
-    }
+    /**
+     * @brief Checks if the object has an editor
+     * @return True if it has editor, else false
+     */
+    bool hasEditor() const override;
 
-    juce::AudioProcessorEditor* createEditor() override { return nullptr; }
-    bool hasEditor() const override { return false; }
+    /**
+     * @brief Returns the name of the object
+     * @return Name as juce::String
+     */
+    const juce::String getName() const override;
 
-    const juce::String getName() const override { return "SimplePanner"; }
+    /**
+     * @brief Checks if the object accepts MIDI input
+     * @return True if Midi is accepted, else false
+     */
+    bool acceptsMidi() const override;
 
-    bool acceptsMidi() const override { return false; }
-    bool producesMidi() const override { return false; }
-    double getTailLengthSeconds() const override { return 0.0; }
+    /**
+     * @brief Checks if the object produces MIDI output
+     * @return True if Midi is produced, else false
+     */
+    bool producesMidi() const override;
 
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram(int index) override {}
-    const juce::String getProgramName(int index) override { return {}; }
-    void changeProgramName(int index, const juce::String& newName) override {}
+    /**
+     * @brief Returns the tail length in seconds
+     * @return Tail length in seconds
+     */
+    double getTailLengthSeconds() const override;
 
-    void getStateInformation(juce::MemoryBlock& destData) override {}
-    void setStateInformation(const void* data, int sizeInBytes) override {}
+    /**
+     * @brief Returns the number of programs
+     * @return Number of programs
+     */
+    int getNumPrograms() override;
+
+    /**
+     * @brief Returns the index of the current program
+     * @return Current program index
+     */
+    int getCurrentProgram() override;
+
+    /**
+     * @brief Sets the current program to the given index
+     * @param index Index to set
+     */
+    void setCurrentProgram(int index) override;
+
+    /**
+     * @brief Returns the name of the program at index
+     * @param index Index to get name from
+     * @return Name of program as juce::String
+     */
+    const juce::String getProgramName(int index) override;
+
+    /**
+     * @brief Changes the name of the program at index
+     * @param index Index to change name
+     * @param newName New name to set
+     */
+    void changeProgramName(int index, const juce::String& newName) override;
+
+    /**
+     * @brief Copies state information to a juce::MemoryBlock
+     * @param destData Destination juce::MemoryBlock
+     */
+    void getStateInformation(juce::MemoryBlock& destData) override;
+
+    /**
+     * @brief Sets state information from a data buffer
+     * @param data Pointer to the data
+     * @param sizeInBytes Size of the data in bytes
+     */
+    void setStateInformation(const void* data, int sizeInBytes) override;
+
+    /**
+     * @brief Returns value 88
+     * @return 88
+     */
+    static int a();
+
 
 private:
     float panValue;

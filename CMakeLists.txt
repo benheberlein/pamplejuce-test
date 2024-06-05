@@ -40,6 +40,27 @@ project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
 # Couple tweaks that IMO should be JUCE defaults
 include(JUCEDefaults)
 
+# This lets us use our code in both the JUCE targets and our Test target
+# Without running into ODR violations
+add_library(SharedCode INTERFACE
+    source/SimplePanner.cpp
+    source/SimplePanner.h
+    source/GainPluginDemo.h)
+
+# C++20, please
+# Use cxx_std_23 for C++23 (as of CMake v 3.20)
+target_compile_features(SharedCode INTERFACE cxx_std_20)
+
+# Manually list all .h and .cpp files for the plugin
+# If you are like me, you'll use globs for your sanity.
+# Just ensure you employ CONFIGURE_DEPENDS so the build system picks up changes
+# If you want to appease the CMake gods and avoid globs, manually add files like so:
+# set(SourceFiles Source/PluginEditor.h Source/PluginProcessor.h Source/PluginEditor.cpp Source/PluginProcessor.cpp)
+file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
+target_sources(SharedCode INTERFACE
+    source/SimplePanner.cpp source/SimplePanner.h)
+target_sources(SharedCode INTERFACE ${SourceFiles})
+
 # JUCE is setup as a submodule in the /JUCE folder
 # Locally, you must run `git submodule update --init --recursive` once
 # and later `git submodule update --remote --merge` to keep it up to date
@@ -86,22 +107,6 @@ juce_add_plugin("${PROJECT_NAME}"
     # This can be different from PROJECT_NAME and can have spaces!
     # You might want to use v${MAJOR_VERSION} here once you go to v2...
     PRODUCT_NAME "${PRODUCT_NAME}")
-
-# This lets us use our code in both the JUCE targets and our Test target
-# Without running into ODR violations
-add_library(SharedCode INTERFACE)
-
-# C++20, please
-# Use cxx_std_23 for C++23 (as of CMake v 3.20)
-target_compile_features(SharedCode INTERFACE cxx_std_20)
-
-# Manually list all .h and .cpp files for the plugin
-# If you are like me, you'll use globs for your sanity.
-# Just ensure you employ CONFIGURE_DEPENDS so the build system picks up changes
-# If you want to appease the CMake gods and avoid globs, manually add files like so:
-# set(SourceFiles Source/PluginEditor.h Source/PluginProcessor.h Source/PluginEditor.cpp Source/PluginProcessor.cpp)
-file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h")
-target_sources(SharedCode INTERFACE ${SourceFiles})
 
 # Adds a BinaryData target for embedding assets into the binary
 include(Assets)
@@ -163,4 +168,4 @@ include(Benchmarks)
 include(GitHubENV)
 
 # Include the Audio Plugin Host from JUCE for debugging
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/JUCE/extras/AudioPluginHost)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/JUCE/extras)
